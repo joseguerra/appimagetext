@@ -1,26 +1,21 @@
-This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
+# ionic-3-camera-app: Ionic 3 Camera App
+Using Ionic 3 to build an app that utilize the camera module of the phone.
+This repo was referred and modified from [Ionic 2: Using Camera with Ionic Native](http://blog.ionic.io/10-minutes-with-ionic-2-using-the-camera-with-ionic-native/)
 
-## How to use this template
+Created by: Pinetop Technology
 
-*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/ionic-team/ionic2-app-base).
+<img width="900px" height="500px" src="http://www.pinetoptechno.com.my/wp-content/uploads/2017/05/camera-app-full.jpg" />
 
-To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/ionic-team/ionic2-app-base).
+In order to run this, following steps are required.
 
-### With the Ionic CLI:
+Run `npm install`
 
-Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
+Run `ionic serve`
 
-```bash
-$ sudo npm install -g ionic cordova
-$ ionic start myTabs tabs
-```
+It will launch a browser for you, however this thing is only work in the phone.
+So it is required to link it to the Ionic View.
 
-Then, to run it, cd into `myTabs` and run:
+If you have linked your Ionic to Ionic View, just run `ionic upload` else you need to login and link to the Ionic View account by `ionic login` and `ionic link`.
 
-```bash
-$ ionic cordova platform add ios
-$ ionic cordova run ios
-```
-
-Substitute ios for android if not on a Mac.
+Please share with us if you encounter any problem.
 

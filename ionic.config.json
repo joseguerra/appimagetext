@@ -1,6 +1,5 @@
 {
-  "name": "myApp",
-  "app_id": "",
-  "type": "ionic-angular",
-  "integrations": {}
+  "name": "cameraApp",
+  "app_id": "daed8da9",
+  "type": "ionic-angular"
 }
