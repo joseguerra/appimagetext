@@ -12,7 +12,12 @@
 
   <div *ngIf="srcImage" class="image-wrapper">
     <img id="image" [src]="srcImage" />
+    <div id="data">{{data}}</div>
     <button ion-button icon-left block (click)="recognizeText()" color="light">
+      <ion-icon name="send"></ion-icon>
+      Procesar
+    </button>
+    <button ion-button icon-left block (click)="send()" color="light">
       <ion-icon name="send"></ion-icon>
       Enviar
     </button>

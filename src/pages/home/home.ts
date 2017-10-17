@@ -12,15 +12,16 @@ export class HomePage {
     object: this
     private srcImage: string;
     public curp: any;
-    public progreso: number =  0
-    constructor(public navCtrl: NavController, 
-                public navParams: NavParams, 
+    public progreso: number =  0;
+    private data: any;
+    constructor(public navCtrl: NavController,
+                public navParams: NavParams,
                 public actionSheetCtrl: ActionSheetController,
                 public receiptscanProvider :Receiptscan,
                 public loadingCtrl: LoadingController,
                 public camera: Camera,
                 public alertCtrl: AlertController) {
-                    
+                  this.data = {}
                  }
 
     presentActionSheet() {
@@ -80,10 +81,14 @@ export class HomePage {
     //      targetWidth: 1000,
     //      targetHeight: 1000
         }).then((imageData) => {
-            this.srcImage = `data:image/jpeg;base64,${imageData}`;      
+            this.srcImage = `data:image/jpeg;base64,${imageData}`;
         }, (err) => {
             console.log(err);
         });
+    }
+
+    send() {
+
     }
 
     recognizeText() {
@@ -95,37 +100,49 @@ export class HomePage {
         var edad =  "";
         var sexo =  "";
         var curp =  "";
-        
+        var obj = this;
         Tesseract.recognize(this.srcImage, {
             lang: 'spa',
             tessedit_char_blacklist: 'e'
         })
         .progress(function  (p) {
-            
+
             if(prueba){
                 loader = object.loadingCtrl.create({
         	        content: 'Procesando... '
       	        })
                 loader.present();
             }
-      	        
+
             prueba = false;
 
              console.log('progress', p)    })
          .then(function(result){
-             console.log(result)
-             for(var i=0;i<result.words.length;i++){   
+             console.log(result);
+             var text = result.text;
+             var nombre_obj = text.split('\n');
+             var nombre_text = nombre_obj[2] + nombre_obj[3] + nombre_obj[4] + nombre_obj[5] +nombre_obj[6]+nombre_obj[7]
+             console.log(nombre_text);
+             function isLetter(str) {
+               return str.length === 1 && str.match(/[a-z]/i);
+             }
+             for (var i = 0; i < nombre_text.length; i++) {
+               if ((nombre_text[i] == nombre_text[i].toUpperCase() && isLetter(nombre_text[i])) || (nombre_text[i] == " ") ){
+                 nombre += nombre_text[i];
+               }
+             }
+             for(var i=0;i<result.words.length;i++){
                 if(i<10)
                 {
                     if(Number(result.words[i].text) > 1){
-                        
+
                         edad = result.words[i].text
                     }
                     if(result.words[i].text == "H" || result.words[i].text == "M"){
-                        
+
                         sexo = result.words[i].text
                     }
-                }  
+                }
 
                 if(result.words[i].text=="NOMBRE"){
                     apellido = result.words[i+1].text;
@@ -136,19 +153,22 @@ export class HomePage {
                     console.log("Curp: "+curp);
                 }
 
-                
+
             }
             let data: any;
-            data = {
+            console.log(object);
+            console.log(obj);
+
+            object.data = JSON.stringify({
                 "nombre": nombre,
                 "apellido": apellido,
                 "sexo": sexo,
                 "edad": edad,
                 "crup": curp
-            } 
-            object.receiptscanProvider.send(data).subscribe(
+            })
+            object.receiptscanProvider.send(object.data).subscribe(
                 data =>{
-                    loader.dismiss();     
+                    loader.dismiss();
                     let alert = object.alertCtrl.create({
                     title: "Perfecto",
                     subTitle: "Datos enviados con exito",
@@ -157,21 +177,21 @@ export class HomePage {
                     alert.present();
                     console.log(data);
                 },err =>{
-                    loader.dismiss();     
+                    loader.dismiss();
                     let alert = object.alertCtrl.create({
                     title: "Error",
                     subTitle: "Revise su conexión",
                     buttons: ['OK']
                     });
                     alert.present();
-                    loader.dismiss();     
+                    loader.dismiss();
                 }
             );
-            
+
 
         })
 
-        
+
     }
 
     restart() {
