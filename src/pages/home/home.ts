@@ -63,12 +63,9 @@ export class HomePage {
         // You can check the values here:
         // https://github.com/driftyco/ionic-native/blob/master/src/plugins/camera.ts
         this.camera.getPicture(options).then((imageData) => {
-        console.log("entre");
-        
-        this.srcImage = `data:image/jpeg;base64,${imageData}`;
-        console.log(this.srcImage)
+            this.srcImage = `data:image/jpeg;base64,${imageData}`;
         }, (err) => {
-        console.log(`ERROR -> ${JSON.stringify(err)}`);
+            console.log(`ERROR -> ${JSON.stringify(err)}`);
         });
     }
 
@@ -83,15 +80,9 @@ export class HomePage {
     //      targetWidth: 1000,
     //      targetHeight: 1000
         }).then((imageData) => {
-            console.log("entre");
-            this.srcImage = `data:image/jpeg;base64,${imageData}`;
-
-            console.log(this.srcImage)
-
-            
+            this.srcImage = `data:image/jpeg;base64,${imageData}`;      
         }, (err) => {
             console.log(err);
-         
         });
     }
 
@@ -122,6 +113,7 @@ export class HomePage {
 
              console.log('progress', p)    })
          .then(function(result){
+             console.log(result)
              for(var i=0;i<result.words.length;i++){                 
                 if(result.words[i].text=="NOMBRE"){
                     apellido = result.words[i+1].text;
