@@ -40,7 +40,7 @@ export class HomePage {
             },{
             text: 'Foto de prueba',
             handler: () => {
-                this.srcImage = 'assets/img/captura.png';
+                this.srcImage = 'assets/img/2017-10-16.png';
             }
             },{
             text: 'Cancelar',
@@ -102,19 +102,25 @@ export class HomePage {
         var sexo =  "";
         var curp =  "";
         var obj = this;
+
         Tesseract.recognize(this.srcImage, {
             lang: 'spa',
             tessedit_char_blacklist: 'e'
         })
         .progress(function  (p) {
-          console.log('progress', p.progress * 100);
+          var progress = p.progress * 100;
+          console.log('progress', loader);
             if(prueba){
                 loader = object.loadingCtrl.create({
-        	        content: 'Procesando... ' 
+        	        content: 'Procesando... '
       	        })
                 loader.present();
+            }else{
+              loader.data.content ="Procesando " + progress + "%";
+              loader.present();
             }
 
+console.log(loader);
             prueba = false;
 
           })
@@ -134,7 +140,7 @@ export class HomePage {
                }
              }
              for (var i = 0; i < direccion_text.length; i++) {
-               if ((direccion_text[i] == direccion_text[i].toUpperCase() && isLetter(direccion_text[i])) || (direccion_text[i] == " ") || (parseInt(direccion_text[i])) ){
+               if ((direccion_text[i] == direccion_text[i].toUpperCase() && isLetter(direccion_text[i])) || (direccion_text[i] == " ") || (direccion_text[i] == "0") || (parseInt(direccion_text[i])) ){
                  direccion += direccion_text[i];
                }
              }
