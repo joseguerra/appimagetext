@@ -97,6 +97,7 @@ export class HomePage {
         let loader: any;
         var apellido =  "";
         var nombre =  "";
+        var direccion =  "";
         var edad =  "";
         var sexo =  "";
         var curp =  "";
@@ -106,29 +107,35 @@ export class HomePage {
             tessedit_char_blacklist: 'e'
         })
         .progress(function  (p) {
-
+          console.log('progress', p.progress * 100);
             if(prueba){
                 loader = object.loadingCtrl.create({
-        	        content: 'Procesando... '
+        	        content: 'Procesando... ' 
       	        })
                 loader.present();
             }
 
             prueba = false;
 
-             console.log('progress', p)    })
+          })
          .then(function(result){
              console.log(result);
              var text = result.text;
              var nombre_obj = text.split('\n');
              var nombre_text = nombre_obj[2] + nombre_obj[3] + nombre_obj[4] + nombre_obj[5] +nombre_obj[6]+nombre_obj[7]
-             console.log(nombre_text);
+             var direccion_text = nombre_obj[8] + nombre_obj[9] + nombre_obj[10] + nombre_obj[11];
+             console.log(nombre_obj);
              function isLetter(str) {
                return str.length === 1 && str.match(/[a-z]/i);
              }
              for (var i = 0; i < nombre_text.length; i++) {
                if ((nombre_text[i] == nombre_text[i].toUpperCase() && isLetter(nombre_text[i])) || (nombre_text[i] == " ") ){
                  nombre += nombre_text[i];
+               }
+             }
+             for (var i = 0; i < direccion_text.length; i++) {
+               if ((direccion_text[i] == direccion_text[i].toUpperCase() && isLetter(direccion_text[i])) || (direccion_text[i] == " ") || (parseInt(direccion_text[i])) ){
+                 direccion += direccion_text[i];
                }
              }
              for(var i=0;i<result.words.length;i++){
@@ -161,7 +168,7 @@ export class HomePage {
 
             object.data = JSON.stringify({
                 "nombre": nombre,
-                "apellido": apellido,
+                "direccion": direccion,
                 "sexo": sexo,
                 "edad": edad,
                 "crup": curp
