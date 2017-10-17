@@ -114,7 +114,19 @@ export class HomePage {
              console.log('progress', p)    })
          .then(function(result){
              console.log(result)
-             for(var i=0;i<result.words.length;i++){                 
+             for(var i=0;i<result.words.length;i++){   
+                if(i<10)
+                {
+                    if(Number(result.words[i].text) > 1){
+                        
+                        edad = result.words[i].text
+                    }
+                    if(result.words[i].text == "H" || result.words[i].text == "M"){
+                        
+                        sexo = result.words[i].text
+                    }
+                }  
+
                 if(result.words[i].text=="NOMBRE"){
                     apellido = result.words[i+1].text;
                     console.log("Apellido: "+apellido)
@@ -123,22 +135,7 @@ export class HomePage {
                     curp = result.words[i+1].text
                     console.log("Curp: "+curp);
                 }
-                if(result.words[i].text=="EDAD"){
-                    edad = result.words[i+1].text
-                    console.log("Edad: "+edad);
-                }
-                if(result.words[i].text=="saxo"){
-                    sexo = result.words[i+1].text
-                    console.log("Sexo: "+sexo);
-                    for(var j=2;j<4;j++){
-                        if(result.words[i+j].text!="DOMICILIO")
-                            nombre += result.words[i+j].text + " "
-                            
-                    }
-                    console.log("Nombre: "+nombre);
-                    
-                
-                }
+
                 
             }
             let data: any;
