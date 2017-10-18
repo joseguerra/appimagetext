@@ -128,17 +128,69 @@ console.log(loader);
              console.log(result);
              var text = result.text;
              var nombre_obj = text.split('\n');
-             var nombre_text = nombre_obj[2] + nombre_obj[3] + nombre_obj[4] + nombre_obj[5] +nombre_obj[6]+nombre_obj[7]
-             var direccion_text = nombre_obj[8] + nombre_obj[9] + nombre_obj[10] + nombre_obj[11];
-             console.log(nombre_obj);
-             function isLetter(str) {
-               return str.length === 1 && str.match(/[a-z]/i);
+
+             console.log('********', nombre_obj);
+
+             //  ***************************************************** nombre 1
+             var not_found=true;
+             var nombre_obj_back = nombre_obj.slice(0);
+             while(not_found){
+              //  debugger;
+              try {
+                if (nombre_obj[0].indexOf("NOMBRE") > -1){
+                  not_found = false;
+                }
+              } catch (e) {
+                not_found = false;
+                nombre_obj =nombre_obj_back;
+                var index = 0;
+                while(index < 5){
+                  var has_word = false;
+                  for (var j = 0; j < nombre_obj[0].length; j++) {
+                    if (nombre_obj[0][j] == nombre_obj[0][j].toUpperCase()){
+                      has_word = true;
+                      break;
+                    }
+                  }
+                  if (has_word){
+                    break;
+                  }else{
+                    nombre_obj.shift();
+                  }
+                  index += 1;
+                }
+              }
+              nombre_obj.shift()
              }
-             for (var i = 0; i < nombre_text.length; i++) {
-               if ((nombre_text[i] == nombre_text[i].toUpperCase() && isLetter(nombre_text[i])) || (nombre_text[i] == " ") ){
-                 nombre += nombre_text[i];
+             console.log('222222', nombre_obj);
+             for (var i = 0; i < nombre_obj.length; i++) {
+               nombre_obj[i] = nombre_obj[i].split("EDAD")[0];
+               nombre_obj[i] = nombre_obj[i].split("SEXO")[0];
+             }
+             var nombre_text = nombre_obj[0] + nombre_obj[1] + nombre_obj[2]; //+nombre_obj[7]; //nombre_obj[2] +
+
+
+               var direccion_text = nombre_obj[8] + nombre_obj[9] + nombre_obj[10] + nombre_obj[11];
+
+               function isLetter(str) {
+                 return str.length === 1 && str.match(/[a-z]/i);
                }
-             }
+               var after_space = 1;
+               for (var i = 0; i < nombre_text.length; i++) {
+                 if ((nombre_text[i] == nombre_text[i].toUpperCase() && isLetter(nombre_text[i])) || (nombre_text[i] == " ") ){
+                    nombre += nombre_text[i];
+                 }
+                 if (nombre_text[i] == " ") {
+                   after_space = 1;
+                 }else{
+                   after_space += 1;
+                 }
+               }
+               nombre = nombre.split(" EN ").join('');
+            //  var nombre_uno = nombre.split('EDAD').join('').split('SEXO')[0];
+            //  var nombre_dos = nombre.split('EDAD').join('').split('SEXO')[1];
+            //  nombre = nombre_uno + nombre_dos.substr(2);
+              //  *****************************************************
              for (var i = 0; i < direccion_text.length; i++) {
                if ((direccion_text[i] == direccion_text[i].toUpperCase() && isLetter(direccion_text[i])) || (direccion_text[i] == " ") || (direccion_text[i] == "0") || (parseInt(direccion_text[i])) ){
                  direccion += direccion_text[i];
@@ -169,9 +221,6 @@ console.log(loader);
 
             }
             let data: any;
-            console.log(object);
-            console.log(obj);
-
             object.data = JSON.stringify({
                 "nombre": nombre,
                 "direccion": direccion,
