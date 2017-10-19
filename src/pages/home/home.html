@@ -6,13 +6,32 @@
 
 <ion-content padding>
 
+  <ion-card>
+    <ion-card-content>
+      La imagen debe ir centrada, y debe aparecer el carnet completo <b style="color: red;">sin fondos</b>
+    </ion-card-content>
+  </ion-card>
+
   <button class="select-image" ion-button block *ngIf="!srcImage" (click)="presentActionSheet()" color="light">
     <ion-icon name="camera"></ion-icon>
   </button>
 
   <div *ngIf="srcImage" class="image-wrapper">
     <img id="image" [src]="srcImage" />
+
+    <ion-list *ngIf="imgProcesada">
+      <div ion-item ><b>Nombre:</b> {{data.nombre}}</div>
+      <div ion-item ><b>Dirección:</b> {{data.direccion}}</div>
+      <div ion-item ><b>Sexo:</b> {{data.sexo}}</div>
+      <div ion-item ><b>Edad:</b> {{data.edad}}</div>
+      <div ion-item ><b>Curp:</b> {{data.crup}}</div>
+    </ion-list>
+
     <button ion-button icon-left block (click)="recognizeText()" color="light">
+      <ion-icon name="send"></ion-icon>
+      Procesar
+    </button>
+    <button ion-button icon-left block (click)="send()" *ngIf="imgProcesada" color="light">
       <ion-icon name="send"></ion-icon>
       Enviar
     </button>
