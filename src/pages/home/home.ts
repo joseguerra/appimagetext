@@ -115,13 +115,13 @@ export class HomePage {
          .then(function(result){
              console.log(result)
              for(var i=0;i<result.words.length;i++){   
-                if(i<10)
+                if(i<15)
                 {
                     if(Number(result.words[i].text) > 1){
                         
                         edad = result.words[i].text
                     }
-                    if(result.words[i].text == "H" || result.words[i].text == "M"){
+                    if(result.words[i].text == "H" || result.words[i].text == "M" || result.words[i].text == "h" || result.words[i].text == "m"){
                         
                         sexo = result.words[i].text
                     }
