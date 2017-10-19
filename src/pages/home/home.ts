@@ -168,10 +168,8 @@ console.log(loader);
                nombre_obj[i] = nombre_obj[i].split("SEXO")[0];
              }
              var nombre_text = nombre_obj[0] + nombre_obj[1] + nombre_obj[2]; //+nombre_obj[7]; //nombre_obj[2] +
-
-
-               var direccion_text = nombre_obj[8] + nombre_obj[9] + nombre_obj[10] + nombre_obj[11];
-
+             var direccion_text = nombre_obj[4] + nombre_obj[5] + nombre_obj[6] + nombre_obj[7] + nombre_obj[8];
+             direccion_text = direccion_text.split("FGLIO")[0].split("CLAVE")[0]
                function isLetter(str) {
                  return str.length === 1 && str.match(/[a-z]/i);
                }
@@ -187,15 +185,13 @@ console.log(loader);
                  }
                }
                nombre = nombre.split(" EN ").join('');
-            //  var nombre_uno = nombre.split('EDAD').join('').split('SEXO')[0];
-            //  var nombre_dos = nombre.split('EDAD').join('').split('SEXO')[1];
-            //  nombre = nombre_uno + nombre_dos.substr(2);
-              //  *****************************************************
+              //  FIN NOMBRE *****************************************************
              for (var i = 0; i < direccion_text.length; i++) {
-               if ((direccion_text[i] == direccion_text[i].toUpperCase() && isLetter(direccion_text[i])) || (direccion_text[i] == " ") || (direccion_text[i] == "0") || (parseInt(direccion_text[i])) ){
+               if (direccion_text[i] == direccion_text[i].toUpperCase() && (isLetter(direccion_text[i]) || direccion_text[i] == " " || direccion_text[i] == "/" || direccion_text[i] == "0" || parseInt(direccion_text[i])) ){
                  direccion += direccion_text[i];
                }
              }
+             // FIN DIRECCION ******************************************
              for(var i=0;i<result.words.length;i++){
                 if(i<10)
                 {
