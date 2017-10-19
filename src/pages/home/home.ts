@@ -11,6 +11,7 @@ export class HomePage {
 
     object: this
     private srcImage: string;
+    public imgProcesada: any;
     public curp: any;
     public progreso: number =  0;
     private data: any;
@@ -88,7 +89,32 @@ export class HomePage {
     }
 
     send() {
-
+      let loader: any;
+      loader = this.loadingCtrl.create({
+        content: 'Enviando... '
+      })
+      loader.present();
+      this.receiptscanProvider.send(this.data).subscribe(
+          data =>{
+              loader.dismiss();
+              let alert = this.alertCtrl.create({
+              title: "Perfecto",
+              subTitle: "Datos enviados con exito",
+              buttons: ['OK']
+              });
+              alert.present();
+              console.log(data);
+          },err =>{
+              loader.dismiss();
+              let alert = this.alertCtrl.create({
+              title: "Error",
+              subTitle: "Revise su conexión",
+              buttons: ['OK']
+              });
+              alert.present();
+              loader.dismiss();
+          }
+      );
     }
 
     recognizeText() {
@@ -115,9 +141,6 @@ export class HomePage {
         	        content: 'Procesando... '
       	        })
                 loader.present();
-            }else{
-              loader.data.content ="Procesando " + progress + "%";
-              loader.present();
             }
 
 console.log(loader);
@@ -213,38 +236,41 @@ console.log(loader);
                     curp = result.words[i+1].text
                     console.log("Curp: "+curp);
                 }
-
-
+            }
+            if (curp == "" || curp == " "){
+              // var curp_text = nombre_obj[8];
+              var curp_obj = nombre_obj[8].split(" ");
+              var j = 0;
+              var last_length = 0;
+              for (var i = 0; i < curp_obj.length; i++) {
+                var l = curp_obj[i].length;
+                console.log(l);
+                if (curp_obj[i].length > last_length){
+                  last_length = curp_obj[i].length
+                  j = i;
+                }
+                // if (curp_text[i] == curp_text[i].toUpperCase() && isLetter(curp_text[i]) ){
+                //   if (curp_text[i+1] != " ")
+                //     curp += curp_text[i];
+                // }
+              }
+              var curp_text = curp_obj[j];
+              for (var i = 0; i < curp_text.length; i++) {
+                if (curp_text[i] == curp_text[i].toUpperCase() && isLetter(curp_text[i]) ){
+                    curp += curp_text[i];
+                }
+              }
             }
             let data: any;
-            object.data = JSON.stringify({
+            object.data = {
                 "nombre": nombre,
                 "direccion": direccion,
                 "sexo": sexo,
                 "edad": edad,
                 "crup": curp
-            })
-            object.receiptscanProvider.send(object.data).subscribe(
-                data =>{
-                    loader.dismiss();
-                    let alert = object.alertCtrl.create({
-                    title: "Perfecto",
-                    subTitle: "Datos enviados con exito",
-                    buttons: ['OK']
-                    });
-                    alert.present();
-                    console.log(data);
-                },err =>{
-                    loader.dismiss();
-                    let alert = object.alertCtrl.create({
-                    title: "Error",
-                    subTitle: "Revise su conexión",
-                    buttons: ['OK']
-                    });
-                    alert.present();
-                    loader.dismiss();
-                }
-            );
+            }
+            loader.dismiss();
+            object.imgProcesada = true;
 
 
         })
@@ -254,6 +280,8 @@ console.log(loader);
 
     restart() {
         this.srcImage = '';
+        this.imgProcesada = false;
+        this.data = {};
         this.presentActionSheet();
     }
 
