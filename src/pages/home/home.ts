@@ -41,7 +41,7 @@ export class HomePage {
             },{
             text: 'Foto de prueba',
             handler: () => {
-                this.srcImage = 'assets/img/2017-10-16.png';
+                this.srcImage = 'assets/img/2017-10-17.jpeg';
             }
             },{
             text: 'Cancelar',

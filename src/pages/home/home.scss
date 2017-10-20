@@ -1,3 +1,9 @@
 page-home {
 
 }
+img{
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  -webkit-filter: brightness(200%);
+  filter: brightness(165%);
+}
