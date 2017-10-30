@@ -16,9 +16,17 @@
     <ion-icon name="camera"></ion-icon>
   </button>
 
-  <div *ngIf="srcImage" class="image-wrapper">
+  <div  class="image-wrapper">
     <img id="image" [src]="srcImage" />
-
+    <img id="image2"  />
+    <script>
+        var c = document.createElement('canvas');
+        var ctx = c.getContext('2d');
+        var img = document.getElementById('image');
+        ctx.drawImage(img, 10, 10);
+        var base64String = c.toDataURL();
+        document.getElementById('image2').src=base64String;
+    </script>
     <ion-list *ngIf="imgProcesada">
       <div ion-item ><b>Nombre:</b> {{data.nombre}}</div>
       <div ion-item ><b>Dirección:</b> {{data.direccion}}</div>

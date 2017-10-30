@@ -41,7 +41,7 @@ export class HomePage {
             },{
             text: 'Foto de prueba',
             handler: () => {
-                this.srcImage = 'assets/img/2017-10-17.jpeg';
+                this.srcImage = 'assets/img/hola2.jpg';
             }
             },{
             text: 'Cancelar',
@@ -129,151 +129,157 @@ export class HomePage {
         var curp =  "";
         var obj = this;
 
-        Tesseract.recognize(this.srcImage, {
-            lang: 'spa',
-            tessedit_char_blacklist: 'e'
-        })
-        .progress(function  (p) {
-          var progress = p.progress * 100;
-          console.log('progress', loader);
-            if(prueba){
-                loader = object.loadingCtrl.create({
-        	        content: 'Procesando... '
-      	        })
-                loader.present();
-            }
 
-console.log(loader);
-            prueba = false;
+
+        setTimeout(function(){
+          Tesseract.recognize(this.srcImage, {
+          // Tesseract.recognize('',{
+              lang: 'spa',
+              tessedit_char_blacklist: 'e'
+          })
+          .progress(function  (p) {
+            var progress = p.progress * 100;
+            console.log('progress', loader);
+              if(prueba){
+                  loader = object.loadingCtrl.create({
+                    content: 'Procesando... '
+                  })
+                  loader.present();
+              }
+
+  console.log(loader);
+              prueba = false;
+
+            })
+           .then(function(result){
+               console.log(result);
+               var text = result.text;
+               var nombre_obj = text.split('\n');
+
+               console.log('********', nombre_obj);
+
+               //  ***************************************************** nombre 1
+               var not_found=true;
+               var nombre_obj_back = nombre_obj.slice(0);
+               while(not_found){
+                //  debugger;
+                try {
+                  if (nombre_obj[0].indexOf("NOMBRE") > -1){
+                    not_found = false;
+                  }
+                } catch (e) {
+                  not_found = false;
+                  nombre_obj =nombre_obj_back;
+                  var index = 0;
+                  while(index < 5){
+                    var has_word = false;
+                    for (var j = 0; j < nombre_obj[0].length; j++) {
+                      if (nombre_obj[0][j] == nombre_obj[0][j].toUpperCase()){
+                        has_word = true;
+                        break;
+                      }
+                    }
+                    if (has_word){
+                      break;
+                    }else{
+                      nombre_obj.shift();
+                    }
+                    index += 1;
+                  }
+                }
+                nombre_obj.shift()
+               }
+               console.log('222222', nombre_obj);
+               for (var i = 0; i < nombre_obj.length; i++) {
+                 nombre_obj[i] = nombre_obj[i].split("EDAD")[0];
+                 nombre_obj[i] = nombre_obj[i].split("SEXO")[0];
+               }
+               var nombre_text = nombre_obj[0] + nombre_obj[1] + nombre_obj[2]; //+nombre_obj[7]; //nombre_obj[2] +
+               var direccion_text = nombre_obj[4] + nombre_obj[5] + nombre_obj[6] + nombre_obj[7] + nombre_obj[8];
+               direccion_text = direccion_text.split("FGLIO")[0].split("CLAVE")[0]
+                 function isLetter(str) {
+                   return str.length === 1 && str.match(/[a-z]/i);
+                 }
+                 var after_space = 1;
+                 for (var i = 0; i < nombre_text.length; i++) {
+                   if ((nombre_text[i] == nombre_text[i].toUpperCase() && isLetter(nombre_text[i])) || (nombre_text[i] == " ") ){
+                      nombre += nombre_text[i];
+                   }
+                   if (nombre_text[i] == " ") {
+                     after_space = 1;
+                   }else{
+                     after_space += 1;
+                   }
+                 }
+                 nombre = nombre.split(" EN ").join('');
+                //  FIN NOMBRE *****************************************************
+               for (var i = 0; i < direccion_text.length; i++) {
+                 if (direccion_text[i] == direccion_text[i].toUpperCase() && (isLetter(direccion_text[i]) || direccion_text[i] == " " || direccion_text[i] == "/" || direccion_text[i] == "0" || parseInt(direccion_text[i])) ){
+                   direccion += direccion_text[i];
+                 }
+               }
+               // FIN DIRECCION ******************************************
+               for(var i=0;i<result.words.length;i++){
+                  if(i<10)
+                  {
+                      if(Number(result.words[i].text) > 1){
+
+                          edad = result.words[i].text
+                      }
+                      if(result.words[i].text == "H" || result.words[i].text == "M"){
+
+                          sexo = result.words[i].text
+                      }
+                  }
+
+                  if(result.words[i].text=="NOMBRE"){
+                      apellido = result.words[i+1].text;
+                      console.log("Apellido: "+apellido)
+                  }
+                  if(result.words[i].text=="CURP"){
+                      curp = result.words[i+1].text
+                      console.log("Curp: "+curp);
+                  }
+              }
+              if (curp == "" || curp == " "){
+                // var curp_text = nombre_obj[8];
+                var curp_obj = nombre_obj[8].split(" ");
+                var j = 0;
+                var last_length = 0;
+                for (var i = 0; i < curp_obj.length; i++) {
+                  var l = curp_obj[i].length;
+                  console.log(l);
+                  if (curp_obj[i].length > last_length){
+                    last_length = curp_obj[i].length
+                    j = i;
+                  }
+                  // if (curp_text[i] == curp_text[i].toUpperCase() && isLetter(curp_text[i]) ){
+                  //   if (curp_text[i+1] != " ")
+                  //     curp += curp_text[i];
+                  // }
+                }
+                var curp_text = curp_obj[j];
+                for (var i = 0; i < curp_text.length; i++) {
+                  if (curp_text[i] == curp_text[i].toUpperCase() && isLetter(curp_text[i]) ){
+                      curp += curp_text[i];
+                  }
+                }
+              }
+              let data: any;
+              object.data = {
+                  "nombre": nombre,
+                  "direccion": direccion,
+                  "sexo": sexo,
+                  "edad": edad,
+                  "crup": curp
+              }
+              loader.dismiss();
+              object.imgProcesada = true;
+
 
           })
-         .then(function(result){
-             console.log(result);
-             var text = result.text;
-             var nombre_obj = text.split('\n');
+        },3000)
 
-             console.log('********', nombre_obj);
-
-             //  ***************************************************** nombre 1
-             var not_found=true;
-             var nombre_obj_back = nombre_obj.slice(0);
-             while(not_found){
-              //  debugger;
-              try {
-                if (nombre_obj[0].indexOf("NOMBRE") > -1){
-                  not_found = false;
-                }
-              } catch (e) {
-                not_found = false;
-                nombre_obj =nombre_obj_back;
-                var index = 0;
-                while(index < 5){
-                  var has_word = false;
-                  for (var j = 0; j < nombre_obj[0].length; j++) {
-                    if (nombre_obj[0][j] == nombre_obj[0][j].toUpperCase()){
-                      has_word = true;
-                      break;
-                    }
-                  }
-                  if (has_word){
-                    break;
-                  }else{
-                    nombre_obj.shift();
-                  }
-                  index += 1;
-                }
-              }
-              nombre_obj.shift()
-             }
-             console.log('222222', nombre_obj);
-             for (var i = 0; i < nombre_obj.length; i++) {
-               nombre_obj[i] = nombre_obj[i].split("EDAD")[0];
-               nombre_obj[i] = nombre_obj[i].split("SEXO")[0];
-             }
-             var nombre_text = nombre_obj[0] + nombre_obj[1] + nombre_obj[2]; //+nombre_obj[7]; //nombre_obj[2] +
-             var direccion_text = nombre_obj[4] + nombre_obj[5] + nombre_obj[6] + nombre_obj[7] + nombre_obj[8];
-             direccion_text = direccion_text.split("FGLIO")[0].split("CLAVE")[0]
-               function isLetter(str) {
-                 return str.length === 1 && str.match(/[a-z]/i);
-               }
-               var after_space = 1;
-               for (var i = 0; i < nombre_text.length; i++) {
-                 if ((nombre_text[i] == nombre_text[i].toUpperCase() && isLetter(nombre_text[i])) || (nombre_text[i] == " ") ){
-                    nombre += nombre_text[i];
-                 }
-                 if (nombre_text[i] == " ") {
-                   after_space = 1;
-                 }else{
-                   after_space += 1;
-                 }
-               }
-               nombre = nombre.split(" EN ").join('');
-              //  FIN NOMBRE *****************************************************
-             for (var i = 0; i < direccion_text.length; i++) {
-               if (direccion_text[i] == direccion_text[i].toUpperCase() && (isLetter(direccion_text[i]) || direccion_text[i] == " " || direccion_text[i] == "/" || direccion_text[i] == "0" || parseInt(direccion_text[i])) ){
-                 direccion += direccion_text[i];
-               }
-             }
-             // FIN DIRECCION ******************************************
-             for(var i=0;i<result.words.length;i++){
-                if(i<10)
-                {
-                    if(Number(result.words[i].text) > 1){
-
-                        edad = result.words[i].text
-                    }
-                    if(result.words[i].text == "H" || result.words[i].text == "M"){
-
-                        sexo = result.words[i].text
-                    }
-                }
-
-                if(result.words[i].text=="NOMBRE"){
-                    apellido = result.words[i+1].text;
-                    console.log("Apellido: "+apellido)
-                }
-                if(result.words[i].text=="CURP"){
-                    curp = result.words[i+1].text
-                    console.log("Curp: "+curp);
-                }
-            }
-            if (curp == "" || curp == " "){
-              // var curp_text = nombre_obj[8];
-              var curp_obj = nombre_obj[8].split(" ");
-              var j = 0;
-              var last_length = 0;
-              for (var i = 0; i < curp_obj.length; i++) {
-                var l = curp_obj[i].length;
-                console.log(l);
-                if (curp_obj[i].length > last_length){
-                  last_length = curp_obj[i].length
-                  j = i;
-                }
-                // if (curp_text[i] == curp_text[i].toUpperCase() && isLetter(curp_text[i]) ){
-                //   if (curp_text[i+1] != " ")
-                //     curp += curp_text[i];
-                // }
-              }
-              var curp_text = curp_obj[j];
-              for (var i = 0; i < curp_text.length; i++) {
-                if (curp_text[i] == curp_text[i].toUpperCase() && isLetter(curp_text[i]) ){
-                    curp += curp_text[i];
-                }
-              }
-            }
-            let data: any;
-            object.data = {
-                "nombre": nombre,
-                "direccion": direccion,
-                "sexo": sexo,
-                "edad": edad,
-                "crup": curp
-            }
-            loader.dismiss();
-            object.imgProcesada = true;
-
-
-        })
 
 
     }
