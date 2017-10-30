@@ -6,13 +6,15 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from '@angular/http';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { Index } from '../pages/home/index';
 import { Camera } from '@ionic-native/camera';
 
 import {Receiptscan} from '../pages/home/receiptscan.provider';
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    Index,
   ],
   imports: [
     BrowserModule,
@@ -22,7 +24,8 @@ import {Receiptscan} from '../pages/home/receiptscan.provider';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    Index,
   ],
   providers: [
     StatusBar,
